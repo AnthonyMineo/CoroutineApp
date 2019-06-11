@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.setContentView(R.layout.activity_main);
         rootLayout = findViewById(R.id.root_layout);
         this.configureDagger();
         this.configureViewModel();
@@ -43,11 +44,16 @@ public class MainActivity extends AppCompatActivity {
 
     private void configureViewModel(){
         mainScreenViewModel = ViewModelProviders.of(this, viewModelFactory).get( MainScreenViewModel.class);
-        mainScreenViewModel.fetchFollowers();
         mainScreenViewModel.getFollowersList().observe(this, this::updateLog);
+        rootLayout.setOnClickListener(v -> {
+            mainScreenViewModel.fetchFollowers();
+        });
     }
 
     private void updateLog(List<GithubUser> followers){
-        Log.e("MainActivity", "Followers = " + followers.get(0).getLogin());
+        for(GithubUser follow : followers){
+            Log.e("MainActivity", "Followers = " + follow.getLogin());
+        }
+
     }
 }
