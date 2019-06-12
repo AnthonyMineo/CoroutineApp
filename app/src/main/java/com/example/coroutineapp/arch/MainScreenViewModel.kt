@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModel
 import com.example.coroutineapp.models.GithubUser
 import kotlinx.coroutines.*
 
+
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
@@ -16,13 +17,21 @@ internal constructor(private val githubDataSource: GithubRepo) : ViewModel() {
     private val coroutineContext: CoroutineContext
         get() = parentJob + Dispatchers.IO
     private val scope = CoroutineScope(coroutineContext)
+    private val handler = CoroutineExceptionHandler { _, exception ->
+        println("Caught $exception")
+    }
 
     val followersList = MutableLiveData<MutableList<GithubUser>>()
 
     fun fetchFollowers(){
-        scope.launch {
-            val followers = githubDataSource.getFollowersFromGithub("JakeWharton")
-            followersList.postValue(followers)
+        scope.launch(handler) {
+            try {
+                val followers = githubDataSource.getFollowersFromGithub("JakeWharton")
+                followersList.postValue(followers)
+            } finally {
+                println("finally block is running")
+            }
+
         }
     }
 
