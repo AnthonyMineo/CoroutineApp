@@ -10,9 +10,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.example.coroutineapp.R;
@@ -23,6 +25,7 @@ import com.example.coroutineapp.views.UserAdapter;
 import dagger.android.AndroidInjection;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -37,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.user_entry) EditText userChoice;
     @BindView(R.id.search_button) Button searchButton;
     @BindView(R.id.recycler_view) RecyclerView recyclerView;
+    @BindView(R.id.spinner_progress_bar) ProgressBar spinnerProgress;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
     private void configureViewModel(){
         mainScreenViewModel = ViewModelProviders.of(this, viewModelFactory).get( MainScreenViewModel.class);
         mainScreenViewModel.getFollowersList().observe(this, this::updateLog);
+        mainScreenViewModel.getSpinner().observe(this, this::showProgressBar);
     }
 
     private void showSnackBar(){
@@ -67,7 +72,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateLog(List<GithubUser> followers){
+        if(followers == null){
+            followers = new ArrayList<>();
+        }
         this.userAdapter.updateData(followers);
+    }
+
+    private void showProgressBar(Boolean state){
+        if (state){
+            spinnerProgress.setVisibility(View.VISIBLE);
+        } else {
+            spinnerProgress.setVisibility(View.GONE);
+        }
     }
 
     private void configureRecyclerView(){
