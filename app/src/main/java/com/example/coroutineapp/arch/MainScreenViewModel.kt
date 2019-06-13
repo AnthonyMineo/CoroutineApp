@@ -13,27 +13,32 @@ class MainScreenViewModel
 @Inject
 internal constructor(private val githubDataSource: GithubRepo) : ViewModel() {
 
-    private val parentJob = Job()
-    private val coroutineContext: CoroutineContext
-        get() = parentJob + Dispatchers.IO
-    private val scope = CoroutineScope(coroutineContext)
+    // Coroutine
+    private val job = Job()
+    private val scope = CoroutineScope(Dispatchers.IO + job)
     private val handler = CoroutineExceptionHandler { _, exception ->
         println("Caught $exception")
     }
 
+    // Data
     val followersList = MutableLiveData<MutableList<GithubUser>>()
 
-    fun fetchFollowers(){
+    fun fetchFollowers(user: String){
         scope.launch(handler) {
             try {
-                val followers = githubDataSource.getFollowersFromGithub("JakeWharton")
+                val followers = githubDataSource.getFollowersFromGithub(user)
                 followersList.postValue(followers)
             } finally {
-                println("finally block is running")
+                //println("finally block is running")
             }
 
         }
     }
 
-    fun cancelAllRequests() = coroutineContext.cancel()
+    fun cancelAllRequests() = job.cancel()
+
+    override fun onCleared() {
+        cancelAllRequests()
+        super.onCleared()
+    }
 }
