@@ -37,7 +37,7 @@ internal constructor(private val githubDataSource: GithubRepo) : ViewModel() {
         }
     }
 
-    fun cancelAllRequests() = job.cancel()
+    private fun cancelAllRequests() = job.cancel()
 
     override fun onCleared() {
         cancelAllRequests()

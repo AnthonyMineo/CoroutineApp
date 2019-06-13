@@ -9,7 +9,6 @@ import com.example.coroutineapp.models.GithubUser
 import kotlinx.coroutines.*
 
 import java.util.ArrayList
-import kotlin.coroutines.CoroutineContext
 
 class UserAdapter : RecyclerView.Adapter<UserViewHolder>() {
 

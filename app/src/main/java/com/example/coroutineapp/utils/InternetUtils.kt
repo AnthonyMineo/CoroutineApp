@@ -11,7 +11,7 @@ class InternetUtils {
             return isWifiAvailable(context) || isMobileDataAvailable(context)
         }
 
-        fun isWifiAvailable(context: Context): Boolean {
+        private fun isWifiAvailable(context: Context): Boolean {
             val cM: ConnectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             val activeNetwork: NetworkInfo? = cM.activeNetworkInfo
             return if(activeNetwork != null && activeNetwork.isConnectedOrConnecting){
@@ -21,7 +21,7 @@ class InternetUtils {
             }
         }
 
-        fun isMobileDataAvailable(context: Context): Boolean{
+        private fun isMobileDataAvailable(context: Context): Boolean{
             val cM: ConnectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             val activeNetwork: NetworkInfo? = cM.activeNetworkInfo
             return if(activeNetwork != null && activeNetwork.isConnectedOrConnecting){

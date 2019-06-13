@@ -4,17 +4,13 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
+import android.view.inputmethod.EditorInfo;
+import android.widget.*;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.example.coroutineapp.R;
@@ -36,9 +32,9 @@ public class MainActivity extends AppCompatActivity {
     private MainScreenViewModel mainScreenViewModel;
     private UserAdapter userAdapter;
 
+    // FOR VIEW
     @BindView(R.id.root_layout) LinearLayout rootLayout;
     @BindView(R.id.user_entry) EditText userChoice;
-    @BindView(R.id.search_button) Button searchButton;
     @BindView(R.id.recycler_view) RecyclerView recyclerView;
     @BindView(R.id.spinner_progress_bar) ProgressBar spinnerProgress;
 
@@ -47,12 +43,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        
+        // Actions
         this.configureDagger();
         this.configureViewModel();
         this.configureRecyclerView();
-        searchButton.setOnClickListener(v -> {
-            fetchNetwork();
-        });
+        this.configureListener();
+
     }
 
     // - Configure Dagger2
@@ -90,6 +87,17 @@ public class MainActivity extends AppCompatActivity {
         this.userAdapter = new UserAdapter();
         this.recyclerView.setAdapter(userAdapter);
         this.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    private void configureListener(){
+        userChoice.setOnEditorActionListener((v, actionId, event) -> {
+            boolean handled = true;
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                fetchNetwork();
+                handled = false;
+            }
+            return handled;
+        });
     }
 
     private void fetchNetwork(){

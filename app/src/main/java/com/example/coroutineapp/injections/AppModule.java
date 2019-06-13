@@ -18,11 +18,10 @@ public class AppModule {
 
     @Provides
     Retrofit provideRetrofit(Gson gson){
-        Retrofit retrofit = new Retrofit.Builder()
+        return new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .baseUrl("https://api.github.com/")
                 .build();
-        return retrofit;
     }
 
     @Provides

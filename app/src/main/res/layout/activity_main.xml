@@ -8,37 +8,24 @@
         tools:context=".controllers.MainActivity"
         android:orientation="vertical">
 
-    <LinearLayout
+    <EditText
+            android:id="@+id/user_entry"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="50dp"
+            android:hint="Choose your user"
+            android:inputType="text"
+            android:imeOptions="actionDone"/>
 
-        <EditText
-                android:id="@+id/user_entry"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_weight="3"
-                android:hint="Choose your user"/>
-
-        <Button
-                android:id="@+id/search_button"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                android:text="Send"/>
-
-        <ProgressBar
-                android:id="@+id/spinner_progress_bar"
-                android:visibility="gone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-    </LinearLayout>
+    <ProgressBar
+            android:id="@+id/spinner_progress_bar"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
     <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="wrap_content"/>
 
 
 </LinearLayout>
